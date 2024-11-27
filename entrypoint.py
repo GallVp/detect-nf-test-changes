@@ -242,6 +242,9 @@ class NfTest:
             if line.strip().startswith("tag "):
                 tag = line.strip().removeprefix("tag ").strip().strip("'\"").casefold()
                 result.append(tag)
+
+        logging.debug(f"In file '{self.test_path}' found tags: {result}")
+
         return result
 
     def detect_if_path_is_in_test(self, path: Path) -> bool:
@@ -305,11 +308,11 @@ class NfTest:
             if nf_test.test_name.casefold() in self.dependencies
         ]
 
-    def find_matching_tags(self, other_nf_tests):
+    def has_matching_tags(self, admissible_tags:str):
         """
-        Finds and returns a list of NF tests from `other_nf_tests` that have matching tags in `self.tags`.
+        Return `True` if `self.tags` is one of `admissible_tags`, otherwise, return `false`.
         """
-        return [nf_test for nf_test in other_nf_tests if nf_test.tags in self.tags]
+        return len([tag for tag in self.tags if tag in admissible_tags]) > 0
 
     def get_parents(self, n: int) -> Path:
         """
@@ -629,10 +632,12 @@ if __name__ == "__main__":
     ]
     if args.tags:
         logging.debug(f"Filtering down to only relevant test tags: {args.tags}")
+        logging.debug(f"Tests before the filter are: {only_selected_nf_tests}")
+
         only_selected_nf_tests = [
             nf_test
             for nf_test in only_selected_nf_tests
-            if nf_test.find_matching_tags(only_selected_nf_tests)
+            if nf_test.has_matching_tags(args.tags)
         ]
 
     # Go back n_parents directories, remove root from path and stringify
