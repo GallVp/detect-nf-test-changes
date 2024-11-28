@@ -411,9 +411,7 @@ def parse_args() -> argparse.Namespace:
         default="",
         help="Tags to include.",
     )
-    parser.add_argument(
-        "--exclude_tags", type=str, default="", help="Tags to exclude."
-    )
+    parser.add_argument("--exclude_tags", type=str, default="", help="Tags to exclude.")
     return parser.parse_args()
 
 
@@ -556,7 +554,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=args.log_level)
     # Argparse handling of nargs is a bit rubbish. So we do it manually here.
     args.types = args.types.split(",")
-    args.tags = args.tags.split(",")
+    args.tags = [tag.strip().casefold() for tag in args.tags.split(",")]
     args.exclude_tags = args.exclude_tags.split(",")
     # Quick validation of args.types since we cant do this in argparse
     if any(
