@@ -90,7 +90,7 @@ jobs:
           log_level: DEBUG
 
       - name: Exclude tags
-        id: exclude_tags
+        id: check_exclude_tags
         uses: ./
         with:
           root: testrepo/test
