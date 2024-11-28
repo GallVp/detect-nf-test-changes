@@ -3,6 +3,8 @@ set -eux
 
 git config --global --add safe.directory '*'
 
+echo "Excluded tags are: ${EXCLUDE_TAGS}"
+
 python /entrypoint.py \
     ${ROOT:+"-p=$ROOT"} \
     ${HEAD:+"-r=$HEAD"} \
