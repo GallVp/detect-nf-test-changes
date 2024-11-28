@@ -637,7 +637,7 @@ if __name__ == "__main__":
     ]
     if args.tags:
         logging.debug(f"Filtering down to only relevant test tags: {args.tags}")
-        logging.debug(f"Tests before the filter are: {[test.test_name for test in only_selected_nf_tests]}")
+        logging.debug(f"Tests before the filter are: {[test.test_path for test in only_selected_nf_tests]}")
 
         only_selected_nf_tests = [
             nf_test
@@ -645,17 +645,17 @@ if __name__ == "__main__":
             if nf_test.has_matching_tags(args.tags)
         ]
 
-        logging.debug(f"Tests after the filter are: {[test.test_name for test in only_selected_nf_tests]}")
+        logging.debug(f"Tests after the filter are: {[test.test_path for test in only_selected_nf_tests]}")
 
     if args.exclude_tags:
         logging.debug(f"Excluding test tags: {args.exclude_tags}")
-        logging.debug(f"Tests before the filter are: {[test.test_name for test in only_selected_nf_tests]}")
+        logging.debug(f"Tests before the filter are: {[test.test_path for test in only_selected_nf_tests]}")
         only_selected_nf_tests = [
             nf_test
             for nf_test in only_selected_nf_tests
             if all(tag not in args.exclude_tags for tag in nf_test.tags)
         ]
-        logging.debug(f"Tests after the filter are: {[test.test_name for test in only_selected_nf_tests]}")
+        logging.debug(f"Tests after the filter are: {[test.test_path for test in only_selected_nf_tests]}")
     # Go back n_parents directories, remove root from path and stringify
     # It's a bit much but might as well do all path manipulation in one place
     logging.info("Normalising test file paths")
