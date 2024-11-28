@@ -310,16 +310,11 @@ class NfTest:
             if nf_test.test_name.casefold() in self.dependencies
         ]
 
-    def find_matching_tags(self, other_nf_tests):
+    def has_matching_tags(self, admissible_tags:str):
         """
-        Finds and returns a list of NF tests from `other_nf_tests` that have matching tags in `self.tags`. If exclude_tags is specified, it will exclude those tags.
-
+        Return `True` if `self.tags` is one of `admissible_tags`, otherwise, return `false`.
         """
-        return [
-            nf_test
-            for nf_test in other_nf_tests
-            if nf_test.tags in self.tags and nf_test.tags not in self.exclude_tags
-        ]
+        return len([tag for tag in self.tags if tag in admissible_tags]) > 0
 
     def get_parents(self, n: int) -> Path:
         """
@@ -643,11 +638,13 @@ if __name__ == "__main__":
         nf_test for nf_test in all_nf_tests if nf_test.test_type.value in args.types
     ]
     if args.tags:
-        logging.debug(f"Filtering down to only included test tags: {args.tags}")
+        logging.debug(f"Filtering down to only relevant test tags: {args.tags}")
+        logging.debug(f"Tests before the filter are: {only_selected_nf_tests}")
+
         only_selected_nf_tests = [
             nf_test
             for nf_test in only_selected_nf_tests
-            if any(tag in args.tags for tag in nf_test.tags)
+            if nf_test.has_matching_tags(args.tags)
         ]
 
     if args.exclude_tags:
